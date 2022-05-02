@@ -15,7 +15,6 @@ const ghPages = require('gulp-gh-pages');
 
 var buildPath = 'build';
 
-// INSTALL GH PAGES E CUSTOMIZAR BRANCHES
 // PRE DEPLOY PROCURAR UM TINY PNG 
 
 // gulp.concat: Junta(concatena) todos os nossos arquivos javascript em um único arquivo javascript.
@@ -34,27 +33,18 @@ function buildCSS() {
 }
 
 function minifyJs() {
-	console.log('');
-	// return gulp.src(['./src/js/script.js'])
-	// 	.pipe(minify())
-	// 	.pipe(rename('script.min.js'))
-	// 	.pipe(gulp.dest('./build/js/'))
-}
-
-// // VER O PQ DISSO
-function minifyJsPolyfill() {
-	// return gulp.src(['./src/js/polyfill.js'])
-	// 	.pipe(minify())
-	// 	.pipe(rename('polyfill.min.js'))
-	// 	.pipe(gulp.dest('./build/js/'))
+	return gulp.src(['./src/js/script.js'])
+		.pipe(minify())
+		.pipe(rename('script.min.js'))
+		.pipe(gulp.dest('./build/js/'))
 }
 
 async function bundle(){
 	return es.concat(
 		gulp.src('./src/index.html').pipe(gulp.dest('./build/')),
-		// gulp.src('./src/images/**/*').pipe(gulp.dest('./build/images/')),
+		gulp.src('./src/images/**/*').pipe(gulp.dest('./build/images/')),
 		gulp.src('./src/fonts/**/*').pipe(gulp.dest('./build/fonts/')),
-        // gulp.src('./src/js/*.min.js').pipe(gulp.dest('./build/js/'))
+        gulp.src('./src/js/*.min.js').pipe(gulp.dest('./build/js/'))
 	);
 }
 
@@ -108,8 +98,7 @@ function deployDev(){
 const build = gulp.series(
 	preBuild,
 	buildCSS, 
-	// minifyJs, 
-	// minifyJsPolyfill,
+	minifyJs, 
 	bundle,
 );
 
