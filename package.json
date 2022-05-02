@@ -1,22 +1,24 @@
 {
-  "name": "appinstaller",
+  "name": "boilergulp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp && gulp watch",
-    "build": "gulp"
+    "start": "gulp",
+    "build": "gulp build",
+    "deployDev": "npm run build && gh-pages -d build -b dev",
+    "deployProd": "npm run build && gh-pages -d build -b prod"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "gh-pages": "^3.2.3",
     "browser-sync": "^2.27.9",
     "del": "^6.0.0",
     "event-stream": "^4.0.1",
     "gulp-clean-css": "^3.9.2",
     "gulp-copy": "^4.0.1",
-    "gulp-gh-pages": "^0.5.4",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",

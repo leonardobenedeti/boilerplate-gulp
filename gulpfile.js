@@ -1,5 +1,3 @@
-"use strict";
-
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const cleanCSS = require('gulp-clean-css');
@@ -10,8 +8,6 @@ const del = require('del')
 const es = require('event-stream');
 const minify = require('gulp-uglify');
 const browserSync = require('browser-sync').create();
-
-const ghPages = require('gulp-gh-pages');
 
 var buildPath = 'build';
 
@@ -59,6 +55,11 @@ async function preBuild(){
         .pipe(gulp.dest('./js'));
 }
 
+async function prePublish(){
+	const deletedFiles = await del('./node_modules/.cache/gh-pages')
+	return console.log('gh-pages deleted', deletedFiles)
+}
+
 function server(){
 	browserSync.init({
         server: "./build",
@@ -71,37 +72,13 @@ function server(){
 	});
 }
 
-function deployRelease(){
-    const opts = {
-        branch: 'release'
-    };
-
-    return gulp.src('./build/**/*')
-        .pipe(ghPages(opts));
-}
-
-function deployDev(){
-    const opts = {
-        branch: 'dev'
-    };
-
-    return gulp.src('./build/**/*')
-        .pipe(ghPages(opts));
-}
-
-async function preDeploy(){
-	const deletedFiles = await del('./.publish')
-	console.log('deletedFiles', deletedFiles)
-}
-
 const build = gulp.series(
 	preBuild,
 	buildCSS, 
 	minifyJs, 
 	bundle,
+	prePublish,
 );
 
 exports.default = gulp.series(build, server);
-exports.preDeploy = preDeploy;
-exports.deployRelease = gulp.series(build, preDeploy, deployRelease);
-exports.deployDev = gulp.series(build, preDeploy, deployDev);
+exports.build = build;
