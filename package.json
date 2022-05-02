@@ -8,7 +8,7 @@
     "start": "gulp",
     "build": "gulp build",
     "deployDev": "gulp build && gh-pages -d build -b dev",
-    "deployProd": "gulp buildDev && gh-pages -d build -b prod"
+    "deployProd": "gulp buildProd && gh-pages -d build -b prod"
   },
   "author": "",
   "license": "ISC",
