@@ -9,14 +9,9 @@ const es = require('event-stream');
 const minify = require('gulp-uglify');
 const browserSync = require('browser-sync').create();
 
+const tinypng = require('gulp-tinypng');
+
 var buildPath = 'build';
-
-// PRE DEPLOY PROCURAR UM TINY PNG 
-
-// gulp.concat: Junta(concatena) todos os nossos arquivos javascript em um único arquivo javascript.
-// gulp.babel: Transpila código ES6 para versão ECMA mais antigas com o objetivo dos arquivos javascript ser suportado por navegadores mais antigos.
-// gulp-uglify: Mimifica arquivos javascript.
-//gulp-htmlmin: Mimifica arquivos html.
 
 function buildCSS() {
     return gulp.src('./src/scss/general.scss')
@@ -33,6 +28,12 @@ function minifyJs() {
 		.pipe(minify())
 		.pipe(rename('script.min.js'))
 		.pipe(gulp.dest('./build/js/'))
+}
+
+function tinyImages(){
+	return gulp.src('./src/images/**/*.{png,jpg,jpeg}')
+        .pipe(tinypng('API_KEY'))
+        .pipe(gulp.dest('./build/images/'));
 }
 
 async function bundle(){
@@ -82,3 +83,4 @@ const build = gulp.series(
 
 exports.default = gulp.series(build, server);
 exports.build = build;
+exports.buildProd = gulp.series(build, tinyImages);
