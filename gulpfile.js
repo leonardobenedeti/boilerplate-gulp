@@ -71,11 +71,6 @@ function server(){
 	});
 }
 
-async function preDeploy(){
-	const deletedFiles = await del('/.publish')
-	console.log('deletedFiles', deletedFiles)
-}
-
 function deployRelease(){
     const opts = {
         branch: 'release'
@@ -94,6 +89,10 @@ function deployDev(){
         .pipe(ghPages(opts));
 }
 
+async function preDeploy(){
+	const deletedFiles = await del('./.publish')
+	console.log('deletedFiles', deletedFiles)
+}
 
 const build = gulp.series(
 	preBuild,
@@ -103,5 +102,6 @@ const build = gulp.series(
 );
 
 exports.default = gulp.series(build, server);
-exports.deployRelease = gulp.series(preDeploy, deployRelease);
-exports.deployDev = gulp.series(preDeploy, deployDev);
+exports.preDeploy = preDeploy;
+exports.deployRelease = gulp.series(build, preDeploy, deployRelease);
+exports.deployDev = gulp.series(build, preDeploy, deployDev);
